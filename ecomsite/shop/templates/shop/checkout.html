@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+ 
+    <title>Document</title>
+</head>
+<body>
+   <div class="container">
+    <div class="row m-5">
+      <div class="col-md-12">
+        <h1>Review your order</h1>
+        <hr>
+      </div>
+    </div>
+    <div class="row m-5">
+      <div class="col-md-12">
+        <h4>Items in your cart</h4>
+        <hr>
+      </div>
+    </div>
+      <div class="row m-5">
+        <div class="col-md-12">
+           
+                    <ul class="list-group" id="item_list">
+                            
+                    </ul>    
+            </div>
+        </div>   
+
+        <div class="row m-5">
+      <div class="col-md-12">
+        <h1>Enter shipping details</h1>
+        <hr>
+      </div>
+    </div>
+        <div class="row m-5">
+          <div class="col-md-12">
+              <form method="POST" >
+                {% csrf_token %}
+                    <input type="hidden" id="items" name="items">
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label for="inputEmail4">Name</label>
+                      <input id="name" name="name" type="text" class="form-control" id="inputEmail4" placeholder="John">
+                    </div>
+                    <div class="form-group col-md-6">
+                      <label for="inputPassword4">Email</label>
+                      <input id="email" name="email" type="text" class="form-control" id="inputPassword4" placeholder="john@john.com">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="inputAddress">Address</label>
+                    <input id="address" name="address" type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+                  </div>
+                  
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                      <label for="inputCity">City</label>
+                      <input id="city" name="city" type="text" class="form-control" id="inputCity">
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="inputState">State</label>
+                      <input id="state" name="state" type="text" class="form-control" id="inputCity">
+                 
+                    </div>
+                    <div class="form-group col-md-2">
+                      <label for="inputZip">Zip</label>
+                      <input id="zipcode" name="zipcode" type="text" class="form-control" id="inputZip">
+                    </div>
+                    <div class="form-group col-md-2">
+                      <label for="inputZip">Amount to be paid</label>
+                      <input readonly="" type="text" class="form-control" id="total" name="total">
+                    </div>
+                  </div>
+                  
+                  
+                  <button type="submit" class="btn btn-warning">Place Order</button>
+                </form>
+          
+          </div>
+
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+if(localStorage.getItem('cart')==null){
+  var cart ={};
+}
+else{
+  cart = JSON.parse(localStorage.getItem('cart'));
+}
+let total = 0;
+for(item in cart){
+  let name = cart[item][1];
+  let quantity = cart[item][0];
+  let price = cart[item][2];
+  total = total + cart[item][2];
+
+
+
+
+
+
+  itemString = `  <li class="list-group-item d-flex justify-content-between align-items-center">${quantity} of  ${name}     <span class="badge badge-warning badge-pill">${price}</span></li>`;
+ 
+  $('#item_list').append(itemString);
+
+
+}
+totalPrice = ` <li class ="list-group-item d-flex justify-content-between align-items-center"><b>Your total</b>
+  ${total}</li> `
+$('#total').val(total);
+$('#item_list').append(totalPrice);
+$('#items').val(JSON.stringify(cart));
+</script>
+</html>
